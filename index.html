@@ -3,14 +3,120 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whiteboard</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data:;">
+  <title>MS Paint Style Whiteboard</title>
   <link rel="stylesheet" href="index.css">
-  <script src="./index.js" defer></script>
+  <script src="./renderer.js"></script>
 </head>
 <body>
-  <div class="toolbar">
-    <button onclick="clearCanvas()">Clear</button>
+  <h1>MLP Paint</h1>
+  
+  <div class="ribbon-menu">
+    <div class="ribbon-tab active">Home</div>
+    <div class="ribbon-tab">View</div>
   </div>
+  
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <div class="group-title">Tools</div>
+      <div class="tool-buttons">
+        <button class="btn tool-btn active" data-tool="pen" onclick="selectTool('pen')" title="Pen">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z'/></svg>" alt="Pen">
+        </button>
+
+        <button class="btn tool-btn" data-tool="eraser" onclick="selectTool('eraser')" title="Eraser">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M15.14 3c-.51 0-1.02.2-1.41.59L2.59 14.73c-.78.77-.78 2.04 0 2.83L5.03 20h7.94l8.88-8.88c.78-.78.78-2.05 0-2.83l-5.29-5.29c-.39-.39-.91-.59-1.42-.59z'/></svg>" alt="Eraser">
+        </button>
+        <button class="btn tool-btn" data-tool="text" onclick="selectTool('text')" title="Text">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z'/></svg>" alt="Text">
+        </button>
+      </div>
+    </div>
+    
+    <div class="toolbar-group">
+      <div class="group-title">Shapes</div>
+      <div class="shape-buttons">
+        <button class="btn shape-btn" data-shape="line" onclick="selectShape('line')" title="Line">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M19 13H5v-2h14v2z'/></svg>" alt="Line">
+        </button>
+        <button class="btn shape-btn" data-shape="rectangle" onclick="selectShape('rectangle')" title="Rectangle">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M19 5H5v14h14V5zm0-2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14z'/></svg>" alt="Rectangle">
+        </button>
+        <button class="btn shape-btn" data-shape="circle" onclick="selectShape('circle')" title="Circle">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z'/></svg>" alt="Circle">
+        </button>
+        <button class="btn shape-btn" data-shape="triangle" onclick="selectShape('triangle')" title="Triangle">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 7.77L18.39 18H5.61L12 7.77M12 4L2 20h20L12 4z'/></svg>" alt="Triangle">
+        </button>
+
+      </div>
+    </div>
+    
+    <div class="toolbar-group">
+      <div class="group-title">Size</div>
+      <div class="size-buttons">
+        <button class="btn size-btn" data-size="1" onclick="setBrushSize(1)" title="Small">S</button>
+        <button class="btn size-btn active" data-size="3" onclick="setBrushSize(3)" title="Medium">M</button>
+        <button class="btn size-btn" data-size="5" onclick="setBrushSize(5)" title="Large">L</button>
+        <button class="btn size-btn" data-size="10" onclick="setBrushSize(10)" title="Extra Large">XL</button>
+      </div>
+    </div>
+    
+    <div class="toolbar-group">
+      <div class="group-title">Colors</div>
+      <div class="color-palette">
+        <div class="color-row primary-colors">
+          <button class="btn color-btn active" data-color="#000000" style="background-color: #000000;" onclick="selectColor('#000000')" title="Black"></button>
+          <button class="btn color-btn" data-color="#7F7F7F" style="background-color: #7F7F7F;" onclick="selectColor('#7F7F7F')" title="Gray"></button>
+          <button class="btn color-btn" data-color="#880015" style="background-color: #880015;" onclick="selectColor('#880015')" title="Dark Red"></button>
+          <button class="btn color-btn" data-color="#ED1C24" style="background-color: #ED1C24;" onclick="selectColor('#ED1C24')" title="Red"></button>
+          <button class="btn color-btn" data-color="#FF7F27" style="background-color: #FF7F27;" onclick="selectColor('#FF7F27')" title="Orange"></button>
+          <button class="btn color-btn" data-color="#FFF200" style="background-color: #FFF200;" onclick="selectColor('#FFF200')" title="Yellow"></button>
+          <button class="btn color-btn" data-color="#22B14C" style="background-color: #22B14C;" onclick="selectColor('#22B14C')" title="Green"></button>
+          <button class="btn color-btn" data-color="#00A2E8" style="background-color: #00A2E8;" onclick="selectColor('#00A2E8')" title="Blue"></button>
+          <button class="btn color-btn" data-color="#3F48CC" style="background-color: #3F48CC;" onclick="selectColor('#3F48CC')" title="Dark Blue"></button>
+          <button class="btn color-btn" data-color="#A349A4" style="background-color: #A349A4;" onclick="selectColor('#A349A4')" title="Purple"></button>
+        </div>
+        <div class="color-row secondary-colors">
+          <button class="btn color-btn" data-color="#FFFFFF" style="background-color: #FFFFFF;" onclick="selectColor('#FFFFFF')" title="White"></button>
+          <button class="btn color-btn" data-color="#C3C3C3" style="background-color: #C3C3C3;" onclick="selectColor('#C3C3C3')" title="Light Gray"></button>
+          <button class="btn color-btn" data-color="#B97A57" style="background-color: #B97A57;" onclick="selectColor('#B97A57')" title="Brown"></button>
+          <button class="btn color-btn" data-color="#FFAEC9" style="background-color: #FFAEC9;" onclick="selectColor('#FFAEC9')" title="Pink"></button>
+          <button class="btn color-btn" data-color="#FFC90E" style="background-color: #FFC90E;" onclick="selectColor('#FFC90E')" title="Gold"></button>
+          <button class="btn color-btn" data-color="#EFE4B0" style="background-color: #EFE4B0;" onclick="selectColor('#EFE4B0')" title="Light Yellow"></button>
+          <button class="btn color-btn" data-color="#B5E61D" style="background-color: #B5E61D;" onclick="selectColor('#B5E61D')" title="Light Green"></button>
+          <button class="btn color-btn" data-color="#99D9EA" style="background-color: #99D9EA;" onclick="selectColor('#99D9EA')" title="Light Blue"></button>
+          <button class="btn color-btn" data-color="#7092BE" style="background-color: #7092BE;" onclick="selectColor('#7092BE')" title="Medium Blue"></button>
+          <button class="btn color-btn" data-color="#C8BFE7" style="background-color: #C8BFE7;" onclick="selectColor('#C8BFE7')" title="Light Purple"></button>
+        </div>
+        <div class="custom-color">
+          <label for="custom-color">Custom:</label>
+          <input type="color" id="custom-color" value="#000000" onchange="setCustomColor()">
+        </div>
+      </div>
+    </div>
+    
+    <div class="toolbar-group">
+      <div class="group-title">Actions</div>
+      <div class="action-buttons">
+        <button class="btn" onclick="clearCanvas()" title="Clear All">Clear</button>
+        <button class="btn" onclick="undo()" title="Undo">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z'/></svg>" alt="Undo">
+        </button>
+        <button class="btn" onclick="redo()" title="Redo">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z'/></svg>" alt="Redo">
+        </button>
+        <button class="btn" onclick="saveDrawing()" title="Save">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z'/></svg>" alt="Save">
+        </button>
+      </div>
+    </div>
+  </div>
+  
   <canvas id="whiteboard" width="800" height="600"></canvas>
+  
+  <div class="info">
+    <p>This whiteboard mimics the MS Paint interface. Use the toolbar to change tools, colors, and draw shapes.</p>
+  </div>
 </body>
 </html>

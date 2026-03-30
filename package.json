@@ -1,7 +1,7 @@
 {
   "name": "mlp-paint",
   "version": "1.0.0",
-  "description": "",
+  "description": "MS Paint Style Whiteboard Web Application",
   "homepage": "https://github.com/EldinBegano/mlp-paint#readme",
   "bugs": {
     "url": "https://github.com/EldinBegano/mlp-paint/issues"
@@ -12,9 +12,8 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx serve .",
+    "test": "echo \"No tests specified\" && exit 0"
   }
 }

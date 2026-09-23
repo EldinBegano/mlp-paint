@@ -1,1 +1,36 @@
-MLP-Paint
+= MLP Paint
+
+A small MS Paint style drawing app that runs in the browser. Plain HTML, CSS and JavaScript, no build step.
+
+== Running
+
+Open `index.html` in a browser, or serve the folder:
+
+[source,sh]
+----
+npm start   # runs `npx serve .`
+----
+
+== Features
+
+* Pen, eraser and text tools; line, rectangle, ellipse and triangle shapes with an optional fill.
+* Shapes show a live preview with their size while you drag.
+* The canvas fills the window. Resize it by dragging the handles on its edges or from *View → Canvas size*.
+* Undo and redo for everything, including clearing and resizing the canvas.
+* *View* tab: zoom, gridlines, status bar and full screen.
+* Save the drawing as a PNG.
+
+== Shortcuts
+
+[cols="1,2"]
+|===
+| Ctrl+Z / Ctrl+Y (or Ctrl+Shift+Z) | Undo / redo
+| Ctrl+S | Save as PNG
+| Ctrl + / Ctrl − / Ctrl+0 | Zoom in / out / 100%
+| Ctrl + mouse wheel | Zoom around the cursor
+| P, E, T | Pen, eraser, text
+| L, R, O | Line, rectangle, ellipse
+| Shift while dragging | Square or circle; snap lines to 45°
+| Esc | Cancel the stroke or shape being drawn
+| Ctrl+Enter or Esc | Place the text you are typing
+|===
